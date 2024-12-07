@@ -1,6 +1,6 @@
 console.log(`JavaScript е зареден!`);
 
-var settings = {
+let settings = {
     particles: {
       length: 10000,
       duration: 4,
@@ -10,7 +10,7 @@ var settings = {
     },
   };
 
-  var Point = (function () {
+  let Point = (function () {
     function Point(x, y) {
       this.x = typeof x !== "undefined" ? x : 0;
       this.y = typeof y !== "undefined" ? y : 0;
@@ -28,7 +28,7 @@ var settings = {
       return this;
     };
     Point.prototype.normalize = function () {
-      var length = this.length();
+      let length = this.length();
       this.x /= length;
       this.y /= length;
       return this;
@@ -36,7 +36,7 @@ var settings = {
     return Point;
   })();
 
-  var Particle = (function () {
+  let Particle = (function () {
     function Particle() {
       this.position = new Point();
       this.velocity = new Point();
@@ -63,7 +63,7 @@ var settings = {
         function ease(t) {
           return --t * t * t + 1;
         }
-        var size = image.width * ease(this.age / settings.particles.duration);
+        let size = image.width * ease(this.age / settings.particles.duration);
         context.globalAlpha = 1 - this.age / settings.particles.duration;
         context.drawImage(
           image,
@@ -76,15 +76,15 @@ var settings = {
       return Particle;
     })();
 
-    var ParticlePool = (function () {
-        var particles,
+    let ParticlePool = (function () {
+        let particles,
           firstActive = 0,
           firstFree = 0,
           duration = settings.particles.duration;
       
         function ParticlePool(length) {
           particles = new Array(length);
-          for (var i = 0; i < particles.length; i++) {
+          for (let i = 0; i < particles.length; i++) {
             particles[i] = new Particle();
           }
         }
@@ -96,7 +96,7 @@ var settings = {
           if (firstActive == particles.length) firstActive = 0;
         };
         ParticlePool.prototype.update = function (deltaTime) {
-          var i;
+          let i;
           if (firstActive < firstFree) {
             for (i = firstActive; i < firstFree; i++) {
               particles[i].update(deltaTime);
@@ -134,7 +134,7 @@ var settings = {
       })();
       
       (function (canvas) {
-        var context = canvas.getContext("2d"),
+        let context = canvas.getContext("2d"),
             particles = new ParticlePool(settings.particles.length),
             particleRate = settings.particles.length / settings.particles.duration,
             time;
@@ -146,21 +146,21 @@ var settings = {
             );
         };
       
-        var image = (function () {
-            var canvas = document.createElement("canvas"),
+        let image = (function () {
+            let canvas = document.createElement("canvas"),
                 context = canvas.getContext("2d");
             canvas.width = settings.particles.size;
             canvas.height = settings.particles.size;
       
             function to(t) {
-                var point = pointOnHeart(t);
+                let point = pointOnHeart(t);
                 point.x = settings.particles.size / 2 + (point.x * settings.particles.size) / 350;
                 point.y = settings.particles.size / 2 - (point.y * settings.particles.size) / 350;
                 return point;
             }
             context.beginPath();
-            var t = -Math.PI;
-            var point = to(t);
+            let t = -Math.PI;
+            let point = to(t);
             context.moveTo(point.x, point.y);
             while (t < Math.PI) {
                 t += 0.01;
@@ -168,26 +168,26 @@ var settings = {
                 context.lineTo(point.x, point.y);
             }
             context.closePath();
-            context.fillStyle = "#0000ff";
+            context.fillStyle = "#e8bcf0";
             context.fill();
       
-            var image = new Image();
+            let image = new Image();
             image.src = canvas.toDataURL();
             return image
         })()
         function render() {
             requestAnimationFrame(render);
         
-            var newTime = new Date().getTime() / 1000,
+            let newTime = new Date().getTime() / 1000,
               deltaTime = newTime - (time || newTime);
             time = newTime;
         
             context.clearRect(0, 0, canvas.width, canvas.height);
         
-            var amount = particleRate * deltaTime;
-            for (var i = 0; i < amount; i++) {
-                var pos = pointOnHeart(Math.PI - 2 * Math.PI * Math.random());
-                var dir = pos.clone().length(settings.particles.velocity);
+            let amount = particleRate * deltaTime;
+            for (let i = 0; i < amount; i++) {
+                let pos = pointOnHeart(Math.PI - 2 * Math.PI * Math.random());
+                let dir = pos.clone().length(settings.particles.velocity);
                 particles.add(
                   canvas.width / 2 + pos.x,
                   canvas.height / 2 - pos.y,
